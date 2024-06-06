@@ -1,0 +1,1307 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Product List</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+  </head>
+
+  <body>
+    <style>
+      @font-face {
+        font-family: "proxima_nova_rgregular";
+        src: url("https://litmus.com/fonts/Emails/proximanova-regular-webfont.eot");
+        src: url("https://litmus.com/fonts/Emails/proximanova-regular-webfont.eot?#iefix")
+            format("embedded-opentype"),
+          url("https://litmus.com/fonts/Emails/proximanova-regular-webfont.woff")
+            format("woff"),
+          url("https://litmus.com/fonts/Emails/proximanova-regular-webfont.ttf")
+            format("truetype"),
+          url("https://litmus.com/fonts/Emails/proximanova-regular-webfont.svg#proxima_nova_rgregular")
+            format("svg");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      body {
+        font-family: "proxima_nova_rgregular", Helvetica, Arial, sans-serif;
+      }
+
+      * {
+        padding: 0;
+        margin-left: 2px;
+        box-sizing: border-box;
+      }
+
+      .select2-container--default
+        .select2-results__option--highlighted[aria-selected] {
+        background-color: #385072 !important;
+        color: white;
+      }
+
+      .select2-container--default .select2-results > .select2-results__options {
+        max-height: 250px;
+        height: 250px;
+        top: 0%;
+        top: 0;
+      }
+
+      #select2-games-container.select2-selection__rendered {
+        margin-left: 2px;
+        font-size: 12px;
+        box-sizing: border-box;
+      }
+
+      #select2-country-container.select2-selection__rendered {
+        margin-left: 2px;
+        font-size: 12px;
+        box-sizing: border-box;
+      }
+
+      .select2-selection--multiple {
+        overflow: hidden !important;
+        height: auto !important;
+      }
+
+      .select2-choices {
+        min-height: 250px;
+        max-height: 250px;
+        overflow-y: auto;
+      }
+
+      h5 {
+        font-family: Tahoma;
+      }
+
+      h6 {
+        color: black;
+        font-weight: bold;
+        margin-bottom: 0px;
+        padding-left: 2px;
+      }
+
+      .input-field {
+        width: 95%;
+        max-width: 95%;
+        font-size: 12px;
+        padding-left: 10px;
+        margin-left: 3px;
+        border-radius: 2px;
+        border-width: 1px;
+        /* box-shadow: 5px 10px #888888; */
+        /* border: #000000; */
+        border-color: #a1a1a1;
+        display: inline-flexbox;
+        height: 25px;
+      }
+
+      .invalid-placeholder {
+        background-color: #fcddcb;
+        columns: white;
+      }
+
+      ::-webkit-input-placeholder {
+        /* Edge */
+        color: rgb(68, 67, 67);
+        font-size: 12px;
+      }
+
+      :-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: rgb(68, 67, 67);
+        font-size: 12px;
+      }
+
+      ::placeholder {
+        color: rgb(68, 67, 67);
+        font-size: 12px;
+      }
+
+      .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .select-css {
+        max-width: 70%;
+      }
+
+      form {
+        width: 300px;
+        margin: 0 auto;
+        text-align: center;
+        padding-top: 50px;
+      }
+
+      .value-button {
+        display: inline-block;
+        border: 1px solid #ddd;
+        margin: 0px;
+        width: 40px;
+        height: 20px;
+        text-align: center;
+        vertical-align: middle;
+        padding: 11px 0;
+        background: #eee;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .value-button:hover {
+        cursor: pointer;
+      }
+
+      form #decrease {
+        margin-right: -4px;
+        border-radius: 8px 0 0 8px;
+      }
+
+      form #increase {
+        margin-left: -4px;
+        border-radius: 0 8px 8px 0;
+      }
+
+      form #input-wrap {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      input#number {
+        text-align: center;
+        border: none;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        margin: 0px;
+        width: 15%;
+        max-width: 20%;
+        height: 40px;
+      }
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      .cart-header {
+        display: flex;
+        justify-content: left;
+        position: relative;
+        width: 300px;
+      }
+
+      .cart-header h4 {
+        text-align: left;
+        margin-top: 0;
+        padding-top: 0;
+      }
+
+      .cart-header input {
+        position: absolute;
+        right: 0;
+        margin-top: 0px;
+      }
+
+      .glyphicon {
+        float: right;
+        margin-left: 3px;
+        cursor: pointer;
+      }
+
+      .quantity-input {
+        width: 3%;
+        position: absolute;
+        margin-bottom: 2px;
+        height: 20px;
+      }
+
+      .demo-wrap {
+        position: relative;
+        height: 100vh;
+      }
+
+      .demo-wrap:before {
+        content: " ";
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .demo-content {
+        position: relative;
+      }
+
+      #submit-button {
+        margin-top: 10px;
+      }
+    </style>
+    <script>
+      var language = "th";
+      window.addEventListener("load", (event) => {
+        console.log("page is fully loaded");
+        let { lang, status } = Qs.parse(location.search, {
+          ignoreQueryPrefix: true,
+        });
+        language = lang;
+        document.getElementById("title").innerHTML =
+          language == "th"
+            ? "กรุณากรอกรายละเอียดต่อไปนี้เพื่อติดต่อคุณกับทีมสนับสนุนลูกค้าของเรา 😊"
+            : "Please fill in the following details to connect you to our Customer Support team 😊";
+        document.getElementById("name-header").innerHTML =
+          language == "th" ? "ชื่อ" : "Name";
+        document.getElementById("email-header").innerHTML =
+          language == "th" ? "อีเมล" : "Email";
+        document.getElementById("payment-header").innerHTML =
+          language == "th"
+            ? "ช่องทางการชำระเงิน(ไม่จำเป็น)"
+            : "Payment Channel(optional)";
+        document.getElementById("game-header").innerHTML =
+          language == "th" ? "สินค้า/เกม(ไม่จำเป็น)" : "Product/Game(optional)";
+        document.getElementById("name").placeholder =
+          language == "th" ? "กรุณากรอกชื่อของคุณ" : "Please enter your name";
+        document.getElementById("email").placeholder =
+          language == "th"
+            ? "กรุณากรอกอีเมล์ของคุณ"
+            : "Please enter your email";
+        document.getElementById("product-option").innerHTML =
+          language == "th"
+            ? "กรุณาเลือกช่องทางการชำระเงินของคุณ"
+            : "Please select your payment channel";
+        document.getElementById("game-option").innerHTML =
+          language == "th"
+            ? "โปรดเลือกเกม/ผลิตภัณฑ์ของคุณ"
+            : "Please select your game/product";
+        document.getElementById("submit-button").value =
+          language == "th" ? "ส่ง" : "Submit";
+        if (status == "offline") {
+          const message = document.createElement("h6");
+          message.innerHTML = language == "th" ? "ข้อความ" : "Message";
+          message.id = "message-header";
+          document.getElementById("offline-message").appendChild(message);
+          const messageBox = document.createElement("textarea");
+          // messageBox.placeholder = language == "th" ? "message" : "message"
+          messageBox.type = "text";
+          messageBox.id = "user-message";
+          messageBox.name = "message";
+          // messageBox.onchange = messageHandler()
+          messageBox.classList.add("input-field");
+          messageBox.style.height = "50px";
+          document.getElementById("offline-message").appendChild(messageBox);
+          // messageBox.setAttribute("oninput", messageHandler());
+          const attachment = document.createElement("h6");
+          attachment.innerHTML = language == "th" ? "ไฟล์แนบ" : "Attachment";
+          attachment.id = "attachment-header";
+          document.getElementById("offline-message").appendChild(attachment);
+          const attachmentInput = document.createElement("input");
+          attachmentInput.type = "file";
+          attachmentInput.classList.add("form-control");
+          attachmentInput.classList.add("input-field");
+          attachmentInput.style.height = "30px";
+          attachmentInput.id = "read-file";
+          // attachmentInput.onchange = "fileUpload()"
+          document
+            .getElementById("offline-message")
+            .appendChild(attachmentInput);
+        }
+      });
+
+      var totalSelection = [];
+      var count = 0;
+      var countrys = {
+        Brazil: [
+          "7-Eleven",
+          "AIS",
+          "Bank Transfers and cash at retail",
+          "Card Payments",
+          "CAT",
+          "Codacash",
+          "Dolfin",
+          "DTAC",
+          "K PLUS",
+          "Lazada",
+          "One-2-Call Cash Card",
+          "PromptPay",
+          "Rabbit LINE Pay",
+          "ShopeePay",
+          "TrueMoney Voucher",
+          "TrueMoney Wallet",
+          "Truemove H",
+          "n/a",
+        ],
+      };
+
+      $(document).ready(function () {
+        var gamesArray = [
+          "13 Poker",
+          "8 Ball Pool",
+          "8Elements",
+          "9k Poker",
+          "Abjuice",
+          "ACE Live",
+          "AFK Arena",
+          "AFK Legends",
+          "Aha 2",
+          "Akiba Origin",
+          "Alchemy Stars",
+          "Among Heroes: Fantasy Samkok",
+          "Amor Amis",
+          "APEX Legends Mobile",
+          "Aptoide",
+          "Arcane Saga",
+          "Arena Mania: Magic Heroes CCG",
+          "Art of Conquest",
+          "Asphalt 9",
+          "Auto chess",
+          "Azur Lane",
+          "Badlanders",
+          "Bagelcode",
+          "Basketrio",
+          "Bat Messenger",
+          "Battle Towers",
+          "Beasts Evolved",
+          "BeeFire Game",
+          "BeIN",
+          "Bermuda",
+          "BF Games",
+          "Big9 TV",
+          "Bigo",
+          "Bigwinner Poker Game",
+          "Bingo Town",
+          "Blade of Queen",
+          "Blink",
+          "Bliss-Lite",
+          "Blockman Go",
+          "Blood Strike",
+          "Blue fantasy",
+          "Blued",
+          "Bluestacks",
+          "Boomz Origin",
+          "Borderlands 3",
+          "Brawl Stars",
+          "Candy Crush Saga",
+          "Capsa Susun",
+          "Capsun",
+          "Captain Tsubasa: Ace",
+          "Captain Tsubasa: Dream Team",
+          "Cardboard Clash",
+          "Carol Games Platform",
+          "Cave Shooter",
+          "Cerberus",
+          "Chaos Crisis",
+          "ChatLive",
+          "Cherry",
+          "Chess Rush",
+          "Chief Almighty",
+          "Chimeraland",
+          "Cities: Skylines - Airport",
+          "Cities: Skylines - Calm the Mind Radio",
+          "City of Crime: Gangs War",
+          "Civilization VI",
+          "Clash of Clans",
+          "Clash Of Islands War",
+          "Clash Royale",
+          "Cloud Song",
+          "Club Vegas",
+          "CMGE",
+          "Cooking Adventure",
+          "Counter Side",
+          "Crisis Action",
+          "CrossFire Legend",
+          "Crossing Void",
+          "Crunchyroll",
+          "Crusader Kings III: Royal Court",
+          "Crusaders of Light",
+          "Cyber Hunter",
+          "Dark Nemesis",
+          "Date A Live",
+          "Deity Arena",
+          "Destiny Girl",
+          "Diablo: Immortal",
+          "Disney Magic Kingdoms",
+          "Disorder",
+          "Divine Realm",
+          "Domino Gaple",
+          "Domino QiuQiu Gaple",
+          "Domino99",
+          "Doojin",
+          "Dragon Age M",
+          "Dragon Brawlers",
+          "Dragon City",
+          "Dragon King Fishing",
+          "Dragon Raja",
+          "Dreame",
+          "Drift Tycoon",
+          "Dummy",
+          "Dummy Poker",
+          "Dummyland",
+          "Dungeon Survivor III Dark Genesis",
+          "Dunk City Dynasty",
+          "Dynasty Defense",
+          "Dynasty Heroes",
+          "Dynasty Warriors: Overlords",
+          "EA SPORTS FC Mobile",
+          "Easysleep",
+          "Echat",
+          "Echocalypse",
+          "Eclipse Isle",
+          "EFUN",
+          "Eggy Party",
+          "ElectronicSoul",
+          "Empire of Sin: Make It Count",
+          "Enjoy Fun",
+          "Enjoy Game",
+          "Entropy 2099",
+          "EOS RED",
+          "EPL Manager",
+          "Era of Celestials",
+          "Eternal Love",
+          "Europa Universalis IV: Origins",
+          "Face Poker",
+          "Falling Sky",
+          "FancyU",
+          "Fantasy Westward Journey",
+          "FantasyBlade",
+          "Fantopy",
+          "Farlight 84",
+          "Fashion Dream",
+          "Fashion Fantasy",
+          "FIFA Mobile",
+          "Fighting Elf",
+          "Final Impact",
+          "Fincon",
+          "Fingerdummy",
+          "Fishing Master",
+          "Fishing Rocket",
+          "Flash Party",
+          "Food Fantasy",
+          "Football Master",
+          "For All Time",
+          "FUN Pay",
+          "FundayGame",
+          "Funmela",
+          "Funny Fighters: Battle Royale",
+          "Funpax",
+          "Funtap",
+          "Gaga",
+          "Game Gold",
+          "Game Hollywood",
+          "Game of Khans",
+          "Game of Sultans",
+          "Gameview",
+          "GAMO",
+          "Gash",
+          "Genesis Soul: Legends",
+          "Genshin Impact",
+          "Genshin Impact PC",
+          "Gita Music",
+          "GM99",
+          "Go Game",
+          "God of Sword: Legendary",
+          "Goddess MUA",
+          "Goddess of Genesis",
+          "Gogo Live",
+          "Gold Storm Casino",
+          "Grampus",
+          "Grand theft Auto V",
+          "Greater Shine Limited (HeyTap)",
+          "Growtopia",
+          "Gumi",
+          "Gunship Battle Total Warfare",
+          "Hago",
+          "Haku",
+          "Halo Digital",
+          "Happy Fish",
+          "Happy Hour",
+          "Happy Poker",
+          "Harry Potter",
+          "Harry Potter: Magic Awakened",
+          "Hay Day",
+          "Hearts of Iron IV: No Step Back",
+          "Hellow",
+          "Hero Rush",
+          "HeroDreamX",
+          "Heroes Evolved",
+          "HeyTap",
+          "Hi Poker 3D",
+          "Higame",
+          "Higgs Ocean War",
+          "Hilo",
+          "Hoang Cung 2",
+          "Hogwarts Legacy",
+          "Honkai Impact 3",
+          "Honkai: Star Rail",
+          "Horoscope",
+          "HugMe",
+          "Hyper Font",
+          "Hyper Front",
+          "Identity V",
+          "Idle Dungeon",
+          "Idle Dynasty",
+          "Idle Gog",
+          "Idle Monster Go",
+          "Idol Party",
+          "IIUGAME",
+          "iManga",
+          "Immortal Taoists",
+          "Immortal World",
+          "iQiyi",
+          "IQOO",
+          "iReader",
+          "Island King",
+          "Jiao Wo Wan Sui Ye",
+          "JinJinJin 999",
+          "Josudo",
+          "Joy",
+          "JoyDash",
+          "Junior Three Kingdom 2",
+          "K Show",
+          "Kaeng",
+          "Kerbal Space Program 2",
+          "King of Avalon",
+          "King of Kings",
+          "King's Choice",
+          "Kitty Live",
+          "KK Live",
+          "KOF AllStar",
+          "Kris Destiny",
+          "Lamour",
+          "Land of Doran",
+          "Land of Empires",
+          "Langrisser",
+          "Laplace M",
+          "Last Empire War Z",
+          "League of Legends",
+          "Legacy of Discord",
+          "Legend of Dragon Emperor",
+          "Legends of Runeterra",
+          "LifeAfter",
+          "Light of Thel: Glory of Cepheus",
+          "Lita",
+          "Litmatch",
+          "Liu Li",
+          "Liv Cam (Riley Cillian)",
+          "Live.me",
+          "LivU",
+          "LockU",
+          "Long Wan",
+          "Lord of the Rings",
+          "Lords Mobile",
+          "Lost Sanctuary: Eternal Origin",
+          "Love 3 Kingdoms",
+          "Love and Deepspace",
+          "Ludo Club",
+          "M POP",
+          "Madtale: Idle RPG",
+          "Mafia City",
+          "Mahjong Soul",
+          "Manga Clash",
+          "Manganuts",
+          "MapleStory M",
+          "MapleStory R Evolution",
+          "MARVEL Duel",
+          "Marvel Snap",
+          "MARVEL Strike Force",
+          "MARVEL Super War",
+          "Marvel's Midnight Suns",
+          "Master of Mainland",
+          "Matchat",
+          "MeetU",
+          "Memoriki",
+          "Meogirl Advanture",
+          "Metal Slug: Awakening",
+          "MeYo",
+          "Mico",
+          "Migo",
+          "MiLo",
+          "MiniWorld",
+          "Miracle Game",
+          "Miracle M",
+          "Mission EVO",
+          "Misty Continent: Cursed Island",
+          "Mixu",
+          "MLBB",
+          "MMBO",
+          "Mobgame",
+          "Mobile Legends Adventure",
+          "Modern Combat 5",
+          "Modern Strike Online",
+          "MoeGirl Go",
+          "Monkey King: Arena of Heroes",
+          "Monster Gotcha",
+          "Monsters & Puzzles",
+          "Moon Forest",
+          "MU Origin 2",
+          "MU Origin 3",
+          "MU Strongest",
+          "MXXI",
+          "MydioSing",
+          "MyTurn",
+          "n/a",
+          "Naruto Slugfest",
+          "Naruto Slugfest X",
+          "Need for Speed: No Limits",
+          "Netease",
+          "Never After",
+          "Neverland",
+          "NHN Movies",
+          "Nikki",
+          "Nimo TV",
+          "Ninja Girls",
+          "Ninja Legend Full Fire",
+          "Ninja Online",
+          "NJ Interactive",
+          "Nota Club",
+          "Nova Fantasy",
+          "Oasis Games",
+          "Ocean Arena",
+          "Ocean King",
+          "Ocean Rebellion",
+          "Offgamers",
+          "OlliOlli World",
+          "Omega Legends",
+          "OMG3",
+          "Omlet Arcade",
+          "Omoplay",
+          "One Piece",
+          "One Punch Man",
+          "Onlive",
+          "Onmyoji",
+          "Onmyoji Arena",
+          "Oppo",
+          "Orangenat",
+          "Pago",
+          "Palfish Reading",
+          "Pangsky",
+          "Panila Saga",
+          "Papergames - Path to Nowhere",
+          "Parallel Realms",
+          "Party Star",
+          "Partying",
+          "Path of Immortals",
+          "Paynicorn",
+          "Payssion",
+          "Perfect World",
+          "Phantasy star online 2 new genesis",
+          "Phantom Blade: Executioners",
+          "Piggy GO",
+          "Pik Pik",
+          "Pirates",
+          "Pirates of the Caribbean",
+          "Planet9",
+          "Player",
+          "Pokaa",
+          "Pokdeng",
+          "Poker Go",
+          "Poker TD",
+          "Poker Texas",
+          "Poker time",
+          "Poppo",
+          "Prison Architect - Perfect Storm",
+          "PUBG Lite",
+          "Punishing: Gray Raven",
+          "R2 Games",
+          "Rage of Dragons",
+          "Ragnarok M",
+          "Ragnarok X",
+          "Realm of Spirit",
+          "Red Dead Redemption 2",
+          "Revelation M",
+          "Rhythm Hive",
+          "Ride Out Heroes",
+          "Rise of Elf",
+          "Rise of Kingdoms",
+          "Roseland",
+          "ROW Tam Quoc Truyen Ky",
+          "Ruixun",
+          "Safari Area Top Trainer",
+          "Saint Seiya",
+          "Saint Seiya: Legend of Justice",
+          "Samkok",
+          "Samkok Arena",
+          "Samkok Reborn 3D",
+          "Samurai Master",
+          "Samurai Shodown",
+          "Sausage Man",
+          "Scroll of Onmyoji",
+          "Sea of Conquest: Pirate War",
+          "Sexy 3 Kingdoms",
+          "Shan Koe Mee",
+          "SHAREit",
+          "ShellFire",
+          "Shining Land",
+          "Shining Nikki",
+          "Shwe Horoscope",
+          "Shwestream",
+          "Sky Castle",
+          "Sky Era",
+          "Slot",
+          "Smile Online Cinema",
+          "Snail games",
+          "Snowbreak",
+          "Snowbreak: Containment Zone",
+          "Social APP",
+          "SOL Fantasy",
+          "Soul U",
+          "Spark",
+          "Sprite Fantasia",
+          "Star Castle",
+          "State of Survival",
+          "Stellaris: Aquatics Species Pack",
+          "Storm Arena",
+          "Stormshot: Isle of Adventure",
+          "StrikeG",
+          "Stumble Guys",
+          "Super Mecha Champions",
+          "Super Samkok 2",
+          "Super Sus",
+          "Superfanz",
+          "Survival Heroes",
+          "Sweet Ring",
+          "Sword and Magic",
+          "Sword of Angels",
+          "Sword of Love",
+          "Talent Walker",
+          "Tales of Gaia",
+          "Tales of Grimm",
+          "Tales of Knight",
+          "Talisman Online Mobile",
+          "Tam Quá»'c Chiáº¿n",
+          "Tap Heroes",
+          "Teamfight Tactics",
+          "Tears of Themis",
+          "Teen Patti Gold",
+          "Tevi",
+          "Thai 99 poker",
+          "The Outer Worlds",
+          "The Quarry",
+          "The War of Genesis",
+          "Thetan Arena",
+          "Thscore",
+          "Tiny Tina's Wonderlands",
+          "Tippin.TV",
+          "Tips Pro",
+          "Tom and Jerry",
+          "Top Eleven",
+          "Torchlight Infinite",
+          "TourHQ",
+          "TOYA Live",
+          "Tribe",
+          "Tumile",
+          "TurboVPN",
+          "Tuyoo",
+          "Ugame",
+          "Ujoy",
+          "Ume",
+          "Unhappy Raccoon",
+          "Unlock Game",
+          "Up Live",
+          "Ushort",
+          "Vagary",
+          "Valofe",
+          "Valorant",
+          "VivaUs",
+          "VIVO",
+          "Vshow",
+          "War for Dominance",
+          "Webnovel",
+          "Wefun",
+          "Werewolf",
+          "WeSing",
+          "Westlake",
+          "Westward Adventure",
+          "Wild Hunter: เทพ",
+          "Wild Rift",
+          "Wink",
+          "World War Heroes",
+          "X Hero",
+          "XForce",
+          "Xin dong",
+          "Xinmo",
+          "Xinstar by Wanin",
+          "Xsolla",
+          "Yepop",
+          "Yggdrasil: The Origin",
+          "YIYO",
+          "Yome Live",
+          "Youzoo",
+          "Yoyoo",
+          "Yubo Live",
+          "Zepeto",
+          "Zhu Shen",
+          "Zingplay",
+          "Zombie Rocket",
+          "เก้าเกไทย",
+          "บัตรกำนัล :: After Us",
+          "บัตรกำนัล :: Arena Breakout",
+          "บัตรกำนัล :: Bigo Live Voucher",
+          "บัตรกำนัล :: Bilibili",
+          "บัตรกำนัล :: Black Desert Remastered",
+          "บัตรกำนัล :: CodaCash Top Up",
+          "บัตรกำนัล :: Counter-Strike",
+          "บัตรกำนัล :: Dota2 Steam Wallet Code",
+          "บัตรกำนัล :: Football Manager 2024",
+          "บัตรกำนัล :: GeForce NOW",
+          "บัตรกำนัล :: HyperconnectInc - Azar",
+          "บัตรกำนัล :: LEGO 2K Drive",
+          "บัตรกำนัล :: Like a Dragon",
+          "บัตรกำนัล :: Minecraft Vouchers",
+          "บัตรกำนัล :: NBA 2K24",
+          "บัตรกำนัล :: Netflix Vouchers",
+          "บัตรกำนัล :: New Tales from the Borderlands",
+          "บัตรกำนัล :: Nintendo Gift Card (US)",
+          "บัตรกำนัล :: Nintendo Vouchers",
+          "บัตรกำนัล :: OK Cupid Voucher",
+          "บัตรกำนัล :: Persona 3 Reload",
+          "บัตรกำนัล :: Playstation Vouchers",
+          "บัตรกำนัล :: PUBG",
+          "บัตรกำนัล :: PUBG Mobile UC Vouchers",
+          "บัตรกำนัล :: Roblox",
+          "บัตรกำนัล :: Sid Meier's Civilization VI",
+          "บัตรกำนัล :: Steam Wallet Code",
+          "บัตรกำนัล :: Tinder Direct top up",
+          "บัตรกำนัล :: Tinder Voucher",
+          "บัตรกำนัล :: Tiny Tina's Assault on Dragon Keep",
+          "บัตรกำนัล :: WeTV Vouchers",
+          "บัตรกำนัล :: WWE 2K22",
+          "บัตรกำนัล :: WWE 2K23",
+          "บัตรกำนัล :: Xbox Vouchers",
+          "บันทึกลับสามก๊ก",
+          "เเทพซ่าส์ God Battle",
+          "第七班的傳說",
+          "Aether Gazer",
+          "ASTRA: Knights of Veda",
+          "Astral Odyssey",
+          "Devil May Cry: Peak of Combat",
+          "Dragon Universe: Legend",
+          "DragonNest2: Evolution",
+          "Generation Zombie",
+          "Hello Cafe",
+          "Heroic Uncle Kim: Idle RPG",
+          "Infinite Borders",
+          "Kingdom: The Blood",
+          "Legacy Fate: Sacred & Fearless",
+          "Legend of Mushroom: Rush",
+          "LesPark: Lesbian Chat & Dating",
+          "Meta Fantasy",
+          "SOYO",
+          "Spirit Master",
+          "เทพซ่าส์ God Battle",
+          "บัตรกำนัล :: Discord Subscription",
+          "บัตรกำนัล :: Granblue Fantasy",
+          "บัตรกำนัล :: Pennys Big Breakaway",
+          "บัตรกำนัล :: Shin Megami Tensei V",
+          "บัตรกำนัล :: WWE 2K2",
+        ];
+
+        var countriesArray = ["Thailand"];
+        $("#games").select2({
+          data: gamesArray,
+        });
+
+        $("#country").select2({
+          data: [
+            "7-Eleven",
+            "AIS",
+            "Bank Transfers and cash at retail",
+            "Card Payments",
+            "CAT",
+            "Codacash",
+            "Dolfin",
+            "DTAC",
+            "K PLUS",
+            "Lazada",
+            "One-2-Call Cash Card",
+            "PromptPay",
+            "Rabbit LINE Pay",
+            "ShopeePay",
+            "TrueMoney Voucher",
+            "TrueMoney Wallet",
+            "Truemove H",
+            "n/a",
+          ],
+        });
+      });
+
+      function back() {
+        window.parent.postMessage(
+          JSON.stringify({
+            event_code: "ym-client-event",
+            data: "@go-back",
+          }),
+          "*"
+        );
+      }
+
+      function nameHandler() {
+        const name = document.getElementById("name");
+        if (document.getElementById("name").value.length == 0) {
+          name.classList.add("invalid-placeholder");
+          document.getElementById("invalid-message").innerHTML =
+            language == "th"
+              ? "จำเป็นต้องระบุชื่อเพื่อเชื่อมต่อกับตัวแทน!"
+              : "Name is required to connect an agent!";
+        } else {
+          name.classList.remove("invalid-placeholder");
+          document.getElementById("invalid-message").innerHTML = "";
+        }
+      }
+
+      function emailHandler() {
+        const email = document.getElementById("email");
+        if (document.getElementById("email").value.length == 0) {
+          email.classList.add("invalid-placeholder");
+          document.getElementById("invalid-message").innerHTML =
+            language == "th"
+              ? "จำเป็นต้องมีอีเมลเพื่อเชื่อมต่อกับตัวแทน!"
+              : "Email is required to connect an agent!";
+        } else {
+          email.classList.remove("invalid-placeholder");
+          document.getElementById("invalid-message").innerHTML = "";
+        }
+      }
+
+      function messageHandler() {
+        console.log("came into message handler");
+        const message = document.getElementById("user-message");
+        if (message.value.length == 0) {
+          // message.classList.add('invalid-placeholder');
+          document.getElementById("invalid-message").innerHTML =
+            language == "th"
+              ? ""
+              : "A message should be sent to connect to an agent";
+        } else {
+          document.getElementById("invalid-message").innerHTML = "";
+        }
+      }
+
+      function submit() {
+        const emailRegex =
+          /[A-Za-z\d]+([-._+]?[A-Za-z\d]+)*@[A-Za-z\d]+(-?[A-Za-z\d])*([.][A-Za-z\d]{2,})+/gi;
+        var data = {
+          name: document.getElementById("name").value,
+          email: document.getElementById("email").value,
+        };
+        if (document.getElementById("country").value !== "null") {
+          data.payment = document.getElementById("country").value;
+        }
+        if (document.getElementById("games").value !== "null") {
+          data.games = document.getElementById("games").value;
+        }
+        if (document.getElementById("user-message")) {
+          data.message = document.getElementById("user-message").value;
+        }
+        const name = document.getElementById("name");
+        const email = document.getElementById("email");
+        const country = document.getElementById("country");
+        const games = document.getElementById("games");
+        const message = document.getElementById("user-message");
+        const submit = document.getElementById("submit-button");
+        if (
+          data["payment"] === "null" ||
+          data.games === "null" ||
+          data.email.length == 0 ||
+          data.name.length == 0 ||
+          !emailRegex.test(data.email)
+        ) {
+          if (data.name.length == 0) {
+            document.getElementById("invalid-message").innerHTML =
+              language == "th"
+                ? "จำเป็นต้องระบุชื่อเพื่อเชื่อมต่อกับตัวแทน!"
+                : "Name is required to connect an agent!";
+            name.placeholder =
+              language == "th"
+                ? "จำเป็นต้องระบุชื่อเพื่อเชื่อมต่อกับตัวแทน!"
+                : "Name is required to connect an agent";
+            name.classList.add("invalid-placeholder");
+            email.classList.remove("invalid-placeholder");
+            message.classList.remove("invalid-placeholder");
+            name.focus();
+          } else if (data.email.length == 0) {
+            document.getElementById("invalid-message").innerHTML =
+              language == "th"
+                ? "จำเป็นต้องมีอีเมลเพื่อเชื่อมต่อกับตัวแทน!"
+                : "Email is required to connect an agent!";
+            email.placeholder =
+              language == "th"
+                ? "จำเป็นต้องมีอีเมลเพื่อเชื่อมต่อกับตัวแทน!"
+                : "Email is required to connect an agent";
+            email.classList.add("invalid-placeholder");
+            name.classList.remove("invalid-placeholder");
+            message.classList.remove("invalid-placeholder");
+            email.focus();
+          } else if (!emailRegex.test(data.email)) {
+            document.getElementById("invalid-message").innerHTML =
+              language == "th"
+                ? "ต้องใช้อีเมลที่ถูกต้องเพื่อเชื่อมต่อกับตัวแทน"
+                : "Valid email is required to connect an agent";
+            email.placeholder =
+              language == "th"
+                ? "ต้องใช้อีเมลที่ถูกต้องเพื่อเชื่อมต่อกับตัวแทน"
+                : "Valid email is required to connect an agent";
+            name.classList.remove("invalid-placeholder");
+            message.classList.remove("invalid-placeholder");
+            email.focus();
+          }
+          console.log("Empty/Invalid values are present in the form ");
+        } else {
+          try {
+            var file = document.querySelector("#read-file").files[0];
+            console.log("File value", file);
+            if (file == undefined || file == null) {
+              // Handling missing attachment
+              document.getElementById("invalid-message").innerHTML =
+                language == "th"
+                  ? "Attachment is required for offline form"
+                  : "Attachment is required for offline form";
+              console.log("Attachment is required");
+              return; // Stop submission if attachment is missing
+            } else {
+              const fileBlob = new Blob([file], { type: "audio/m4u" });
+              console.log("File uploaded", fileBlob.toString().length);
+              let { env } = Qs.parse(location.search, {
+                ignoreQueryPrefix: true,
+              });
+              let authorization =
+                env == "sandbox"
+                  ? "Bearer aba1bc0c9163ffb006ffc2f24779f812fbc9294c224785ede2a899dad0b28e63"
+                  : "Bearer 41d10c00f30cab3874036dbd93de44f17d9bc3e22d98b2a8fc361aab75ba3bfd";
+              var myHeaders = new Headers();
+              myHeaders.append("Content-Type", "application/binary");
+              myHeaders.append("Authorization", authorization);
+              myHeaders.append(
+                "Cookie",
+                "__cfruid=ac5013aec99a52bd2b8af09da3ee3120b9711fb6-1622516380; _zendesk_session=BAh7CEkiD3Nlc3Npb25faWQGOgZFVEkiJTAzNDdkMmU1MTA3Y2JmMWIzOTc0MDQyOGE2NTcyYmEwBjsAVEkiDGFjY291bnQGOwBGaQMR95xJIgpyb3V0ZQY7AEZpA582Ow%3D%3D--5e799ad44877306f7c22b2ab9da3034f88c358c3"
+              );
+
+              console.log("this is the variable", data);
+              document.getElementById("submit-button").disabled = true;
+              name.disabled = true;
+              email.disabled = true;
+              country.disabled = true;
+              games.disabled = true;
+              submit.disabled = true;
+
+              var requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: fileBlob,
+                redirect: "follow",
+              };
+              const url =
+                env == "sandbox"
+                  ? `https://codapayment1601020012.zendesk.com/api/v2/uploads?filename=user_upload`
+                  : `https://codapayment.zendesk.com/api/v2/uploads?filename=user_upload`;
+              fetch(url, requestOptions)
+                .then((response) => response.text())
+                .then((result) => {
+                  // Clear the error message
+                  document.getElementById("invalid-message").innerHTML = "";
+
+                  result = JSON.parse(result);
+                  console.log(result);
+                  const attachmentToken = result.upload.token;
+                  data.attachmentToken = attachmentToken;
+                  console.log("Data variable:", data);
+                  window.parent.postMessage(
+                    JSON.stringify({
+                      event_code: "ym-client-event",
+                      data: JSON.stringify({
+                        event: {
+                          code: "user-data",
+                          data: {
+                            userdetails: data,
+                          },
+                        },
+                      }),
+                    }),
+                    "*"
+                  );
+                })
+                .catch((error) => console.log("error", error));
+            }
+          } catch (e) {
+            var e;
+            name.disabled = true;
+            email.disabled = true;
+            country.disabled = true;
+            games.disabled = true;
+            submit.disabled = true;
+            // message.disabled = true;
+            console.log("File not uploaded", e);
+            data.attachmentToken = "";
+            console.log("In catch", data);
+            window.parent.postMessage(
+              JSON.stringify({
+                event_code: "ym-client-event",
+                data: JSON.stringify({
+                  event: {
+                    code: "user-data",
+                    data: {
+                      userdetails: data,
+                    },
+                  },
+                }),
+              }),
+              "*"
+            );
+          }
+
+          name.disabled = true;
+          email.disabled = true;
+          country.disabled = true;
+          games.disabled = true;
+          submit.disabled = true;
+          // message.disabled = true;
+          console.log("File not uploaded", e);
+          data.attachmentToken = "";
+          console.log("In catch", data);
+          window.parent.postMessage(
+            JSON.stringify({
+              event_code: "ym-client-event",
+              data: JSON.stringify({
+                event: {
+                  code: "user-data",
+                  data: {
+                    userdetails: data,
+                  },
+                },
+              }),
+            }),
+            "*"
+          );
+        }
+      }
+    </script>
+    <div class="demo-wrap">
+      <div style="max-width: 600px" class="demo-content center">
+        <img
+          src="https://cdn.yellowmessenger.com/j4mnoorqT5BZ1620811806565.png"
+          alt=""
+          style="
+            float: right;
+            max-width: 20px;
+            max-height: 20px;
+            margin-right: 5px;
+          "
+          onclick="back()"
+        />
+        <div id="selection" style="max-width: 90%">
+          <center>
+            <h6
+              id="title"
+              style="
+                color: black;
+                text-align: left;
+                margin-bottom: 25px;
+                margin-top: 10px;
+                font-size: 12px;
+              "
+            >
+              กรุณากรอกรายละเอียดต่อไปนี้เพื่อติดต่อคุณกับทีมสนับสนุนลูกค้าของเรา
+              😊
+            </h6>
+          </center>
+        </div>
+        <p
+          id="invalid-message"
+          style="color: hsl(0, 100%, 50%); padding-left: 3px; font-size: 12px"
+        ></p>
+        <div id="message"></div>
+        <h6 id="name-header">name<sup>*</sup></h6>
+        <input
+          type="text"
+          placeholder="กรุณากรอกชื่อของคุณ"
+          class="input-field"
+          id="name"
+          name="name"
+          oninput="nameHandler()"
+          required
+        />
+        <h6 id="email-header">ที่อยู่อีเมล<sup>*</sup></h6>
+        <input
+          type="email"
+          placeholder="กรุณากรอกอีเมล์ของคุณ"
+          class="input-field"
+          id="email"
+          name="email"
+          oninput="emailHandler()"
+          required
+        />
+        <h6 id="payment-header">ช่องทางการชำระเงิน(ไม่จำเป็น)<sup>*</sup></h6>
+        <select
+          style="
+            width: 96%;
+            max-width: 96%;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 2px;
+            border-color: #a1a1a1;
+            height: 25px;
+          "
+          class="center"
+          name="country"
+          id="country"
+        >
+          <option id="product-option" value="null" disabled selected></option>
+        </select>
+        <br />
+        <h6 id="game-header">สินค้า/เกม(ไม่จำเป็น)<sup>*</sup></h6>
+        <select
+          style="
+            width: 96%;
+            max-width: 96%;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 2px;
+            border-color: #a1a1a1;
+            height: 25px;
+          "
+          class="center"
+          name="games"
+          id="games"
+        >
+          <option id="game-option" value="null" disabled selected></option>
+        </select>
+        <br />
+        <div id="offline-message"></div>
+
+        <input
+          type="button"
+          value="Enviar"
+          id="submit-button"
+          onclick="submit()"
+          style="
+            max-width: 60%;
+            margin: 15px auto;
+            background-color: #385072;
+            color: #ffffff;
+          "
+          class="btn btn-primary center"
+        />
+      </div>
+    </div>
+  </body>
+</html>
