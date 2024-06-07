@@ -998,202 +998,154 @@
       }
 
       function submit() {
-        const emailRegex =
-          /[A-Za-z\d]+([-._+]?[A-Za-z\d]+)*@[A-Za-z\d]+(-?[A-Za-z\d])*([.][A-Za-z\d]{2,})+/gi;
-        var data = {
-          name: document.getElementById("name").value,
-          email: document.getElementById("email").value,
-        };
-        if (document.getElementById("country").value !== "null") {
-          data.payment = document.getElementById("country").value;
-        }
-        if (document.getElementById("games").value !== "null") {
-          data.games = document.getElementById("games").value;
-        }
-        if (document.getElementById("user-message")) {
-          data.message = document.getElementById("user-message").value;
-        }
-        const name = document.getElementById("name");
-        const email = document.getElementById("email");
-        const country = document.getElementById("country");
-        const games = document.getElementById("games");
-        const message = document.getElementById("user-message");
-        const submit = document.getElementById("submit-button");
-        if (
-          data["payment"] === "null" ||
-          data.games === "null" ||
-          data.email.length == 0 ||
-          data.name.length == 0 ||
-          !emailRegex.test(data.email)
-        ) {
-          if (data.name.length == 0) {
+    const emailRegex = /[A-Za-z\d]+([-._+]?[A-Za-z\d]+)*@[A-Za-z\d]+(-?[A-Za-z\d])*([.][A-Za-z\d]{2,})+/gi;
+    var data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+    };
+    if (document.getElementById("country").value !== "null") {
+        data.payment = document.getElementById("country").value;
+    }
+    if (document.getElementById("games").value !== "null") {
+        data.games = document.getElementById("games").value;
+    }
+    if (document.getElementById("user-message")) {
+        data.message = document.getElementById("user-message").value;
+    }
+
+    const name = document.getElementById("name");
+    const email = document.getElementById("email");
+    const country = document.getElementById("country");
+    const games = document.getElementById("games");
+    const message = document.getElementById("user-message");
+    const submit = document.getElementById("submit-button");
+
+    if (data.email.length == 0 || data.name.length == 0 || !emailRegex.test(data.email)) {
+        if (data.name.length == 0) {
             document.getElementById("invalid-message").innerHTML =
-              language == "th"
-                ? "จำเป็นต้องระบุชื่อเพื่อเชื่อมต่อกับตัวแทน!"
-                : "Name is required to connect an agent!";
+                language == "th" ? "จำเป็นต้องระบุชื่อเพื่อเชื่อมต่อกับตัวแทน!" : "Name is required to connect an agent!";
             name.placeholder =
-              language == "th"
-                ? "จำเป็นต้องระบุชื่อเพื่อเชื่อมต่อกับตัวแทน!"
-                : "Name is required to connect an agent";
+                language == "th" ? "จำเป็นต้องระบุชื่อเพื่อเชื่อมต่อกับตัวแทน!" : "Name is required to connect an agent";
             name.classList.add("invalid-placeholder");
             email.classList.remove("invalid-placeholder");
             message.classList.remove("invalid-placeholder");
             name.focus();
-          } else if (data.email.length == 0) {
+        } else if (data.email.length == 0) {
             document.getElementById("invalid-message").innerHTML =
-              language == "th"
-                ? "จำเป็นต้องมีอีเมลเพื่อเชื่อมต่อกับตัวแทน!"
-                : "Email is required to connect an agent!";
+                language == "th" ? "จำเป็นต้องมีอีเมลเพื่อเชื่อมต่อกับตัวแทน!" : "Email is required to connect an agent!";
             email.placeholder =
-              language == "th"
-                ? "จำเป็นต้องมีอีเมลเพื่อเชื่อมต่อกับตัวแทน!"
-                : "Email is required to connect an agent";
+                language == "th" ? "จำเป็นต้องมีอีเมลเพื่อเชื่อมต่อกับตัวแทน!" : "Email is required to connect an agent";
             email.classList.add("invalid-placeholder");
             name.classList.remove("invalid-placeholder");
             message.classList.remove("invalid-placeholder");
             email.focus();
-          } else if (!emailRegex.test(data.email)) {
+        } else if (!emailRegex.test(data.email)) {
             document.getElementById("invalid-message").innerHTML =
-              language == "th"
-                ? "ต้องใช้อีเมลที่ถูกต้องเพื่อเชื่อมต่อกับตัวแทน"
-                : "Valid email is required to connect an agent";
+                language == "th" ? "ต้องใช้อีเมลที่ถูกต้องเพื่อเชื่อมต่อกับตัวแทน" : "Valid email is required to connect an agent";
             email.placeholder =
-              language == "th"
-                ? "ต้องใช้อีเมลที่ถูกต้องเพื่อเชื่อมต่อกับตัวแทน"
-                : "Valid email is required to connect an agent";
+                language == "th" ? "ต้องใช้อีเมลที่ถูกต้องเพื่อเชื่อมต่อกับตัวแทน" : "Valid email is required to connect an agent";
             name.classList.remove("invalid-placeholder");
             message.classList.remove("invalid-placeholder");
             email.focus();
-          }
-          console.log("Empty/Invalid values are present in the form ");
-        } else {
-          try {
+        }
+        console.log("Empty/Invalid values are present in the form ");
+    } else {
+        try {
             var file = document.querySelector("#read-file").files[0];
             console.log("File value", file);
             if (file == undefined || file == null) {
-              // Handling missing attachment
-              document.getElementById("invalid-message").innerHTML =
-                language == "th"
-                  ? "Attachment is required for offline form"
-                  : "Attachment is required for offline form";
-              console.log("Attachment is required");
-              return; // Stop submission if attachment is missing
+                // Handling missing attachment
+                document.getElementById("invalid-message").innerHTML =
+                    language == "th" ? "Attachment is required for offline form" : "Attachment is required for offline form";
+                console.log("Attachment is required");
+                return; // Stop submission if attachment is missing
             } else {
-              const fileBlob = new Blob([file], { type: "audio/m4u" });
-              console.log("File uploaded", fileBlob.toString().length);
-              let { env } = Qs.parse(location.search, {
-                ignoreQueryPrefix: true,
-              });
-              let authorization =
-                env == "sandbox"
-                  ? "Bearer aba1bc0c9163ffb006ffc2f24779f812fbc9294c224785ede2a899dad0b28e63"
-                  : "Bearer 41d10c00f30cab3874036dbd93de44f17d9bc3e22d98b2a8fc361aab75ba3bfd";
-              var myHeaders = new Headers();
-              myHeaders.append("Content-Type", "application/binary");
-              myHeaders.append("Authorization", authorization);
-              myHeaders.append(
-                "Cookie",
-                "__cfruid=ac5013aec99a52bd2b8af09da3ee3120b9711fb6-1622516380; _zendesk_session=BAh7CEkiD3Nlc3Npb25faWQGOgZFVEkiJTAzNDdkMmU1MTA3Y2JmMWIzOTc0MDQyOGE2NTcyYmEwBjsAVEkiDGFjY291bnQGOwBGaQMR95xJIgpyb3V0ZQY7AEZpA582Ow%3D%3D--5e799ad44877306f7c22b2ab9da3034f88c358c3"
-              );
+                const fileBlob = new Blob([file], { type: "audio/m4u" });
+                console.log("File uploaded", fileBlob.toString().length);
+                let { env } = Qs.parse(location.search, { ignoreQueryPrefix: true });
+                let authorization =
+                    env == "sandbox"
+                        ? "Bearer aba1bc0c9163ffb006ffc2f24779f812fbc9294c224785ede2a899dad0b28e63"
+                        : "Bearer 41d10c00f30cab3874036dbd93de44f17d9bc3e22d98b2a8fc361aab75ba3bfd";
+                var myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/binary");
+                myHeaders.append("Authorization", authorization);
+                myHeaders.append(
+                    "Cookie",
+                    "__cfruid=ac5013aec99a52bd2b8af09da3ee3120b9711fb6-1622516380; _zendesk_session=BAh7CEkiD3Nlc3Npb25faWQGOgZFVEkiJTAzNDdkMmU1MTA3Y2JmMWIzOTc0MDQyOGE2NTcyYmEwBjsAVEkiDGFjY291bnQGOwBGaQMR95xJIgpyb3V0ZQY7AEZpA582Ow%3D%3D--5e799ad44877306f7c22b2ab9da3034f88c358c3"
+                );
 
-              console.log("this is the variable", data);
-              document.getElementById("submit-button").disabled = true;
-              name.disabled = true;
-              email.disabled = true;
-              country.disabled = true;
-              games.disabled = true;
-              submit.disabled = true;
+                console.log("this is the variable", data);
+                document.getElementById("submit-button").disabled = true;
+                name.disabled = true;
+                email.disabled = true;
+                country.disabled = true;
+                games.disabled = true;
+                submit.disabled = true;
 
-              var requestOptions = {
-                method: "POST",
-                headers: myHeaders,
-                body: fileBlob,
-                redirect: "follow",
-              };
-              const url =
-                env == "sandbox"
-                  ? `https://codapayment1601020012.zendesk.com/api/v2/uploads?filename=user_upload`
-                  : `https://codapayment.zendesk.com/api/v2/uploads?filename=user_upload`;
-              fetch(url, requestOptions)
-                .then((response) => response.text())
-                .then((result) => {
-                  // Clear the error message
-                  document.getElementById("invalid-message").innerHTML = "";
+                var requestOptions = {
+                    method: "POST",
+                    headers: myHeaders,
+                    body: fileBlob,
+                    redirect: "follow",
+                };
+                const url =
+                    env == "sandbox"
+                        ? `https://codapayment1601020012.zendesk.com/api/v2/uploads?filename=user_upload`
+                        : `https://codapayment.zendesk.com/api/v2/uploads?filename=user_upload`;
+                fetch(url, requestOptions)
+                    .then((response) => response.text())
+                    .then((result) => {
+                        // Clear the error message
+                        document.getElementById("invalid-message").innerHTML = "";
 
-                  result = JSON.parse(result);
-                  console.log(result);
-                  const attachmentToken = result.upload.token;
-                  data.attachmentToken = attachmentToken;
-                  console.log("Data variable:", data);
-                  window.parent.postMessage(
-                    JSON.stringify({
-                      event_code: "ym-client-event",
-                      data: JSON.stringify({
-                        event: {
-                          code: "user-data",
-                          data: {
-                            userdetails: data,
-                          },
-                        },
-                      }),
-                    }),
-                    "*"
-                  );
-                })
-                .catch((error) => console.log("error", error));
+                        result = JSON.parse(result);
+                        console.log(result);
+                        const attachmentToken = result.upload.token;
+                        data.attachmentToken = attachmentToken;
+                        console.log("Data variable:", data);
+                        window.parent.postMessage(
+                            JSON.stringify({
+                                event_code: "ym-client-event",
+                                data: JSON.stringify({
+                                    event: {
+                                        code: "user-data",
+                                        data: {
+                                            userdetails: data,
+                                        },
+                                    },
+                                }),
+                            }),
+                            "*"
+                        );
+                    })
+                    .catch((error) => {
+                        console.log("error", error);
+                        reenableFormElements();
+                    });
             }
-          } catch (e) {
-            var e;
-            name.disabled = true;
-            email.disabled = true;
-            country.disabled = true;
-            games.disabled = true;
-            submit.disabled = true;
-            // message.disabled = true;
+        } catch (e) {
             console.log("File not uploaded", e);
+            reenableFormElements();
             data.attachmentToken = "";
             console.log("In catch", data);
             window.parent.postMessage(
-              JSON.stringify({
-                event_code: "ym-client-event",
-                data: JSON.stringify({
-                  event: {
-                    code: "user-data",
-                    data: {
-                      userdetails: data,
-                    },
-                  },
+                JSON.stringify({
+                    event_code: "ym-client-event",
+                    data: JSON.stringify({
+                        event: {
+                            code: "user-data",
+                            data: {
+                                userdetails: data,
+                            },
+                        },
+                    }),
                 }),
-              }),
-              "*"
+                "*"
             );
-          }
-
-          name.disabled = true;
-          email.disabled = true;
-          country.disabled = true;
-          games.disabled = true;
-          submit.disabled = true;
-          // message.disabled = true;
-          console.log("File not uploaded", e);
-          data.attachmentToken = "";
-          console.log("In catch", data);
-          window.parent.postMessage(
-            JSON.stringify({
-              event_code: "ym-client-event",
-              data: JSON.stringify({
-                event: {
-                  code: "user-data",
-                  data: {
-                    userdetails: data,
-                  },
-                },
-              }),
-            }),
-            "*"
-          );
         }
-      }
+    }
+}
     </script>
     <div class="demo-wrap">
       <div style="max-width: 600px" class="demo-content center">
