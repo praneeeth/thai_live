@@ -472,8 +472,13 @@
           data.games = document.getElementById("games").value;
         }
         if (document.getElementById("user-message")) {
-          data.message = document.getElementById("user-message").value;
-        }
+    const messageValue = document.getElementById("user-message").value;
+    if (messageValue.trim() !== "") {
+      data.message = messageValue;
+    } else {
+      data.message = "No message provided"; // Set a default message value
+    }
+  }
         const name = document.getElementById("name");
         const email = document.getElementById("email");
         const country = document.getElementById("country");
