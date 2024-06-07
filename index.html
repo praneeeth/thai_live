@@ -275,9 +275,9 @@
         document.getElementById("email-header").innerHTML =
           language == "th" ? "อีเมล" : "Email";
         document.getElementById("payment-header").innerHTML =
-          language == "th" ? "ช่องทางการชำระเงิน" : "Payment Channel";
+          language == "th" ? "ช่องทางการชำระเงิน(ไม่จำเป็น)" : "Payment Channel(optional)";
         document.getElementById("game-header").innerHTML =
-          language == "th" ? "สินค้า/เกม" : "Product/Game";
+          language == "th" ? "สินค้า/เกม(ไม่จำเป็น)" : "Product/Game(optional)";
         document.getElementById("name").placeholder =
           language == "th" ? "กรุณากรอกชื่อของคุณ" : "Please enter your name";
         document.getElementById("email").placeholder =
@@ -663,7 +663,7 @@
           <input type="email" placeholder="กรุณากรอกอีเมล์ของคุณ" class="input-field" id="email" name="email"
               oninput="emailHandler()" required>
           <h6 id="payment-header">
-              ช่องทางการชำระเงิน
+              ช่องทางการชำระเงิน(ไม่จำเป็น)
           </h6>
           <select style="width: 96%;
       max-width: 96%;
@@ -676,7 +676,7 @@
           </select>
           <br>
           <h6 id="game-header">
-              สินค้า/เกม
+              สินค้า/เกม(ไม่จำเป็น)
           </h6>
           <select style="width: 96%;
       max-width: 96%;
